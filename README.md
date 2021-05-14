@@ -59,6 +59,14 @@ It's structured like so:
 }
 ```
 
+Known PID hex codes:
+
+| Device | Hex PID |
+| --- | --- |
+| Control Panel #1 | `0259` |
+| Control Panel #2 | `825B` |
+| CM2 Throttle | `8193` |
+
 The following is an example of a device action:
 ```json5
 {
