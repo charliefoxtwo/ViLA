@@ -1,5 +1,5 @@
 {
-    "$schema": "./Schema/ActionConfiguration.json.schema",
+    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/ViLA/Configuration/Schema/ActionConfiguration.json.schema",
     "devices": {
         "825B": [
             {
