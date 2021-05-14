@@ -1,0 +1,95 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "#appConfig",
+    "title": "Action Configuration",
+    "description": "Configuration for LED actions",
+    "type": "object",
+    "definitions": {
+        "action": {
+            "title": "Action",
+            "description": "An action to take for a USB LED",
+            "type": "object",
+            
+            "definitions": {
+                "target": {
+                    "title": "Target",
+                    "description": "The resulting target of the action",
+                    "type": "object",
+
+                    "properties": {
+                        "ledNumber": {
+                            "description": "The LED number to change",
+                            "type": "integer",
+                            "maximum": 20,
+                            "minimum": 1
+                        },
+                        "boardType": {
+                            "description": "The type of board the LED is on in relation to the PID",
+                            "type": "string",
+                            "enum": ["Default", "AddBoard", "OnBoard", "SlaveBoard"]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": ["ledNumber", "boardType"]
+                },
+                "trigger": {
+                    "title": "Trigger",
+                    "description": "The trigger which determines whether or not the action should run",
+                    "type": "object",
+
+                    "properties": {
+                        "id": {
+                            "description": "The string bios code from dcs-bios to act on",
+                            "type": "string"
+                        },
+                        "value": {
+                            "description": "The value to compare the dcs-bios value to",
+                            "type": "integer"
+                        },
+                        "comparator": {
+                            "description": "The method to compare the dcs-bios value with. The equation should read as 'biosValue comparator value'",
+                            "type": "string",
+                            "enum": ["GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo"]
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": ["id", "value", "comparator"]
+                }
+            },
+            
+            "properties": {
+                "color": {
+                    "description": "The 6-bit color of the LED",
+                    "type": "string",
+                    "pattern": "(00|40|80|ff|FF){3}"
+                },
+                "trigger": {
+                    "description": "The trigger on which to trigger the action",
+                    "$ref": "#/definitions/action/definitions/trigger"
+                },
+                "target": {
+                    "description": "The target of the action",
+                    "$ref": "#/definitions/action/definitions/target"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["color", "trigger", "target"]
+        }
+    },
+
+    "properties": {
+        "devices": {
+            "description": "All devices and device actions go here. The key is the device's USB PID.",
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "description": "The action to take.",
+                    "$ref": "#/definitions/action"
+                }
+            }
+        }
+    },
+
+    "required": ["devices"]
+}

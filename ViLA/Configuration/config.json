@@ -1,0 +1,321 @@
+{
+    "$schema": "./Schema/ActionConfiguration.json.schema",
+    "devices": {
+        "825B": [
+            {
+                "color": "ff8000",
+                "trigger": {
+                    "id": "MASTER_CAUTION_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 1,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "MASTER_CAUTION_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 1,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "FLP_LG_LEFT_GEAR_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 8,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "FLP_LG_LEFT_GEAR_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 8,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "FLP_LG_NOSE_GEAR_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 9,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "FLP_LG_NOSE_GEAR_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 9,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "FLP_LG_RIGHT_GEAR_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 10,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "FLP_LG_RIGHT_GEAR_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 10,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "LANDING_GEAR_HANDLE_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 6,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "ff0000",
+                "trigger": {
+                    "id": "LANDING_GEAR_HANDLE_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 6,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "MASTER_MODE_AA_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 2,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "MASTER_MODE_AA_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 2,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "MASTER_MODE_AG_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "MASTER_MODE_AG_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "FIRE_APU_LT",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 3,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "ff0000",
+                "trigger": {
+                    "id": "FIRE_APU_LT",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 3,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "ff0000",
+                "trigger": {
+                    "id": "LOW_RPM_IND",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 1,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "LOW_RPM_IND",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 1,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "ff8000",
+                "trigger": {
+                    "id": "MASTER_CAUTION_IND",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 2,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "MASTER_CAUTION_IND",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 2,
+                    "boardType": "OnBoard"
+                }
+            }
+        ],
+        "8193": [
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "ARMED_IND",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "ff0000",
+                "trigger": {
+                    "id": "ARMED_IND",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "SAFE_IND",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "MASTER_ARM_SW",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "X130_ARMED",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 5,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "X130_ARMED",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 5,
+                    "boardType": "OnBoard"
+                }
+            }
+        ]
+    }
+}
