@@ -48,7 +48,7 @@ It's structured like so:
 ```json5
 {
     // schema at the top
-    "$schema": "./Schema/ActionConfiguration.json.schema",
+    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/develop/ViLA/Configuration/Schema/ActionConfiguration.json.schema",
     // devices, identified by hex code PID 
     "devices": {
         "825B": [
