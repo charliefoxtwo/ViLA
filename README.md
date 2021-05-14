@@ -8,16 +8,15 @@
 
 ViLA (**Vi**rpil **L**ED **A**utomator) is an extensible tool for configuring your Virpil usb device's LEDs to react to certain events. It can be extended via plugins written by anybody, which can do things like tail log files, pair with DCS-BIOS, and more. These plugins send messages to ViLA, which are parsed according to its configuration file.
 
-![Gear down](https://gfycat.com/responsiblefearlessiceblueredtopzebra.gif)
-![Lights test](https://gfycat.com/wateryunevenbarasingha.gif)
-![Hornet fire test](https://gfycat.com/colossalembellishedfattaileddunnart.gif)
-
+<img src="https://thumbs.gfycat.com/ResponsibleFearlessIceblueredtopzebra-size_restricted.gif" height="400" />
+<img src="https://thumbs.gfycat.com/WateryUnevenBarasingha-size_restricted.gif" height="400" />
+<img src="https://thumbs.gfycat.com/ColossalEmbellishedFattaileddunnart-size_restricted.gif" height="400" />
 
 ## Installation
 
 Download the latest version from the Releases page, and place it in its own folder wherever you want to keep it. You'll need two things:
 
-1. [`config.json`](#config.json)
+1. [`config.json`](#configjson)
 1. `Plugins/` folder (where your plugins will go)
 
 
