@@ -8,92 +8,33 @@
 
 ViLA (**Vi**rpil **L**ED **A**utomator) is an extensible tool for configuring your Virpil usb device's LEDs to react to certain events. It can be extended via plugins written by anybody, which can do things like tail log files, pair with DCS-BIOS, and more. These plugins send messages to ViLA, which are parsed according to its configuration file.
 
-<img src="https://thumbs.gfycat.com/ResponsibleFearlessIceblueredtopzebra-size_restricted.gif" height="400" />
-<img src="https://thumbs.gfycat.com/WateryUnevenBarasingha-size_restricted.gif" height="400" />
-<img src="https://thumbs.gfycat.com/ColossalEmbellishedFattaileddunnart-size_restricted.gif" height="400" />
-
-## Installation
-
-Download the latest version from the Releases page, and place it in its own folder wherever you want to keep it. You'll need two things:
-
-1. [`config.json`](#configjson)
-1. `Plugins/` folder (where your plugins will go)
+<img src="https://thumbs.gfycat.com/ResponsibleFearlessIceblueredtopzebra-size_restricted.gif" height="400" /> <img src="https://thumbs.gfycat.com/WateryUnevenBarasingha-size_restricted.gif" height="400" /> <img src="https://thumbs.gfycat.com/ColossalEmbellishedFattaileddunnart-size_restricted.gif" height="400" />
 
 
-## Installing Plugins
+## Getting started
 
-To install a plugin, just drop it in its own folder within the `Plugins/` folder. Your file tree should look something like this:
+Check out the [wiki](https://github.com/charliefoxtwo/ViLA/wiki) for a getting started guide!
 
-```
-ViLA/
-|-- Plugins/
-|   |-- Plugin A/
-|   |   `-- <dll files>
-|   `-- Plugin B/
-|       `-- <dll files>
-|-- config.json
-`-- ViLA.exe
-```
-Once there, it should be automatically loaded on the next run of ViLA.
 
-Some plugins include:
+## Recommended plugins
 
 - [DCS Bios Reader](https://github.com/charliefoxtwo/ViLA-DCS-BIOS-Reader)
-
-## config.json
-
-The config file tells the program what color to set what led for what action. The config files use jsonschema, so it's recommended to edit them with a text editor that can provide type hints for json files with a defined schema (e.g. VS Code).
-
-It's structured like so:
-```json5
-{
-    // schema at the top
-    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/develop/ViLA/Configuration/Schema/ActionConfiguration.json.schema",
-    // devices, identified by hex code PID 
-    "devices": {
-        "825B": [
-            // array of actions for the device
-            // ...
-        ]
-    }
-}
-```
-
-Known PID hex codes:
-
-| Device | Hex PID |
-| --- | --- |
-| Control Panel #1 | `0259` |
-| Control Panel #2 | `825B` |
-| CM2 Throttle | `8193` |
-
-The following is an example of a device action:
-```json5
-{
-    // color to set the LED to if the trigger succeeds
-    "color": "ff8000",
-    "trigger": {
-        // id to test trigger
-        "biosCode": "MASTER_CAUTION_LT",
-        // value to compare sent value to
-        "value": 1,
-        // how to compare the sent value to this value (<sent> <comparator> <value>)
-        "comparator": "EqualTo"
-    },
-    // the target led to change, if successful
-    "target": {
-        // led number
-        "ledNumber": 1,
-        // location of led
-        "boardType": "OnBoard"
-    }
-}
-```
 
 
 ## Running
 
 Just double-click ViLA.exe to start ViLA. It's important to note that ViLA isn't very useful without plugins, so find some good ones!
+
+
+## What's next?
+
+ViLA has a long way to go. 
+
+ - If you think you've found a bug, open an issue in the [Issues](https://github.com/charliefoxtwo/ViLA/issues) section
+ - If you have a question or need support, try the [Discussions Q&A](https://github.com/charliefoxtwo/ViLA/discussions/categories/q-a) or our Discord ![Discord](https://img.shields.io/discord/840762843917582347?style=flat-square)
+ - If you have an idea for a new feature for ViLA, please share it in the [Ideas](https://github.com/charliefoxtwo/ViLA/discussions/categories/ideas) Discussion section!
+ - If you've done something cool with ViLA, please show us in the [Show and Tell](https://github.com/charliefoxtwo/ViLA/discussions/categories/show-and-tell) Discussion section!
+ - If you're working on a plugin for ViLA, please get in touch either in the [Discussions](https://github.com/charliefoxtwo/ViLA/discussions) tab or on Discord! You're free to work on whatever you want, I'd just love to see what ideas everybody comes up with!
 
 
 ## FAQ
@@ -109,34 +50,6 @@ Not at this time. Maybe at some point in the future though!
 #### Does ViLA support more complex actions, like flashing a light in response to an action?
 
 Not directly, no. You can get creative with the plugin and the Ids in your config.json file, but generally speaking this is not officially supported at this time. Again, maybe at some point in the future!
-
-
-## Developing plugins
-
-> If you have any experience developing .NET applications with plugins, please reach out to me! I'd love to find a way to make the plugin development process smoother, if possible.
-
-It is recommended (but not required) to not package any dlls from the following packages in your plugin. Including them may cause dependency resolution issues. Since the project has copies of these dlls too, there's no need to include them anyway.
- - Virpil.Communicator (you shouldn't be using this anyway)
- - Virpil.Communicator.PluginBase
- - McMaster.NETCore.Plugins (you shouldn't be using this anyway... unless your extension has extensions? o.0)
- - Microsoft.Extensions.Logging.Abstractions
- - Microsoft.Extensions.Logging.Console (you shouldn't be using this anyway)
- - Newtonsoft.json
- - hidlibrary (you probably shouldn't be using this anyway)
- - Microsoft.DotNet.PlatformAbstractions
- - Microsoft.Extensions.Configuration
- - Microsoft.Extensions.Configuration.Abstractions
- - Microsoft.Extensions.Configuration.Binder
- - Microsoft.Extensions.DependencyInjection
- - Microsoft.Extensions.DependencyInjection.Abstractions
- - Microsoft.Extensions.DependencyModel
- - Microsoft.Extensions.Logging
- - Microsoft.Extensions.Logging.Configuration
- - Microsoft.Extensions.Options
- - Microsoft.Extensions.Primitives
- - System.Text.Json
-
-The easiest way to do this is to [specify a manifest file](https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish) when running `dotnet publish`. You can use [plugin_manifest.xml](plugin_manifest.xml) in the root of this repository for exactly this purpose.
 
 
 ## Local Development
