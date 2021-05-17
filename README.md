@@ -3,7 +3,7 @@
 
 [![.NET 5 CI build](https://github.com/charliefoxtwo/ViLA/actions/workflows/ci-build.yml/badge.svg?branch=develop)](https://github.com/charliefoxtwo/ViLA/actions/workflows/ci-build.yml)
 ![GitHub](https://img.shields.io/github/license/charliefoxtwo/ViLA?style=flat-square)
-![Discord](https://img.shields.io/discord/840762843917582347?style=flat-square)
+[![Discord](https://img.shields.io/discord/840762843917582347?style=flat-square)](https://discord.gg/rWAF3AdsKT)
 
 
 ViLA (**Vi**rpil **L**ED **A**utomator) is an extensible tool for configuring your Virpil usb device's LEDs to react to certain events. It can be extended via plugins written by anybody, which can do things like tail log files, pair with DCS-BIOS, and more. These plugins send messages to ViLA, which are parsed according to its configuration file.
@@ -31,10 +31,10 @@ Just double-click ViLA.exe to start ViLA. It's important to note that ViLA isn't
 ViLA has a long way to go. 
 
  - If you think you've found a bug, open an issue in the [Issues](https://github.com/charliefoxtwo/ViLA/issues) section
- - If you have a question or need support, try the [Discussions Q&A](https://github.com/charliefoxtwo/ViLA/discussions/categories/q-a) or our Discord ![Discord](https://img.shields.io/discord/840762843917582347?style=flat-square)
+ - If you have a question or need support, try the [Discussions Q&A](https://github.com/charliefoxtwo/ViLA/discussions/categories/q-a) or our [Discord](https://discord.gg/rWAF3AdsKT)
  - If you have an idea for a new feature for ViLA, please share it in the [Ideas](https://github.com/charliefoxtwo/ViLA/discussions/categories/ideas) Discussion section!
  - If you've done something cool with ViLA, please show us in the [Show and Tell](https://github.com/charliefoxtwo/ViLA/discussions/categories/show-and-tell) Discussion section!
- - If you're working on a plugin for ViLA, please get in touch either in the [Discussions](https://github.com/charliefoxtwo/ViLA/discussions) tab or on Discord! You're free to work on whatever you want, I'd just love to see what ideas everybody comes up with!
+ - If you're working on a plugin for ViLA, please get in touch either in the [Discussions](https://github.com/charliefoxtwo/ViLA/discussions) tab or on [Discord](https://discord.gg/rWAF3AdsKT)! You're free to work on whatever you want, I'd just love to see what ideas everybody comes up with!
 
 
 ## FAQ
