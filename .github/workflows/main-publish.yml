@@ -1,8 +1,8 @@
-name: Publish prerelease build
+name: Publish main build
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "latest"
-        prerelease: true
-        title: "Alpha Build"
+        prerelease: false
+        title: "Latest Build"
         files: |
             **/ViLA.zip
