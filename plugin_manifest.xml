@@ -16,7 +16,7 @@
   <Package Id="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
   <Package Id="Microsoft.Extensions.Primitives" Version="5.0.0" />
   <Package Id="Newtonsoft.Json" Version="13.0.1" />
-  <Package Id="ViLA.PluginBase" Version="1.0.0" />
+  <Package Id="ViLA.PluginBase" Version="1.1.0" />
   <Package Id="hidlibrary" Version="3.3.40" />
   <Package Id="Virpil.Communicator" Version="1.2.0" />
 </StoreArtifacts>

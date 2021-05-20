@@ -1,9 +1,12 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable 8618
-namespace ViLA
+
+using ViLA.Triggers;
+
+namespace ViLA.Configuration
 {
-    public class Action
+    public class LedAction
     {
         public string Color { get; set; }
         public Trigger Trigger { get; set; }

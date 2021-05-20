@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using ViLA.Configuration;
+using ViLA.Triggers;
 using Virpil.Communicator;
 
 namespace ViLA
@@ -40,6 +42,11 @@ namespace ViLA
             }
 
             var devices = DeviceCommunicator.AllConnectedVirpilDevices(loggerFactory).ToList();
+
+            foreach (var device in devices)
+            {
+                _log.LogInformation("Detected device with PID {Device:x4}", device.PID);
+            }
 
             var r = new Runner(devices, cfg.Devices, plugins, loggerFactory.CreateLogger<Runner>());
 
@@ -81,14 +88,18 @@ namespace ViLA
         }
     }
 
-    public class DeviceAction
+    public class DeviceAction<T> where T : TriggerBase
     {
-        public Action Action { get; }
         public ushort Device { get; }
+        public T Trigger { get; }
+        public string Color { get; }
+        public Target Target { get; }
 
-        public DeviceAction(Action action, ushort device)
+        public DeviceAction(string color, T trigger, Target target, ushort device)
         {
-            Action = action;
+            Color = color;
+            Trigger = trigger;
+            Target = target;
             Device = device;
         }
     }
