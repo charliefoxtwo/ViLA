@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Configuration;
 using Microsoft.Extensions.Logging;
-using ViLA.Configuration;
 using ViLA.Triggers;
 using Virpil.Communicator;
 

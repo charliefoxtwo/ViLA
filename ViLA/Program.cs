@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Configuration;
 using McMaster.NETCore.Plugins;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using ViLA.Configuration;
-using ViLA.Triggers;
 using Virpil.Communicator;
 
 namespace ViLA
@@ -21,12 +19,11 @@ namespace ViLA
             var loggerFactory = LoggerFactory.Create(c => c.SetMinimumLevel(LogLevel.Information).AddConsole());
             _log = loggerFactory.CreateLogger<Program>();
 
-            var json = await File.ReadAllTextAsync("Configuration/config.json");
-            var cfg = JsonConvert.DeserializeObject<Config>(json);
+            var cfg = Config.GetAllConfiguration();
 
             if (cfg is null)
             {
-                _log.LogCritical("Config file is empty or error loading config file, exiting...");
+                _log.LogCritical("Config files are empty or error loading config files, exiting...");
                 return;
             }
 

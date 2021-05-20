@@ -1,4 +1,6 @@
-﻿namespace ViLA.Triggers
+﻿using Configuration;
+
+namespace ViLA.Triggers
 {
     public class BasicTrigger : TriggerBase
     {

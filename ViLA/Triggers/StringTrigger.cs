@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Configuration;
 
 namespace ViLA.Triggers
 {

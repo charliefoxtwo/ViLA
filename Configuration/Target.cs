@@ -4,7 +4,7 @@
 
 using Virpil.Communicator;
 
-namespace ViLA.Configuration
+namespace Configuration
 {
     public class Target
     {

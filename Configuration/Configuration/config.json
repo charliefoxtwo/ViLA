@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/ViLA/Configuration/Schema/ActionConfiguration.json.schema",
+    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/Configuration/Schema/ActionConfiguration.json.schema",
     "devices": {
         "825B": [
             {
@@ -241,7 +241,128 @@
                     "ledNumber": 2,
                     "boardType": "OnBoard"
                 }
-            }
+            },
+            // A-10C II
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "GEAR_L_SAFE",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 8,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "GEAR_L_SAFE",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 8,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "GEAR_N_SAFE",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 9,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "GEAR_N_SAFE",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 9,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "GEAR_R_SAFE",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 10,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "00ff00",
+                "trigger": {
+                    "id": "GEAR_R_SAFE",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 10,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "HANDLE_GEAR_WARNING",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 6,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "ff0000",
+                "trigger": {
+                    "id": "HANDLE_GEAR_WARNING",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 6,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "MASTER_CAUTION",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 1,
+                    "boardType": "OnBoard"
+                }
+            },
+            {
+                "color": "ffff00",
+                "trigger": {
+                    "id": "MASTER_CAUTION",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 1,
+                    "boardType": "OnBoard"
+                }
+            },
         ],
         "8193": [
             {
@@ -315,7 +436,92 @@
                     "ledNumber": 5,
                     "boardType": "OnBoard"
                 }
-            }
+            },
+            // A-10C II
+            {
+                "color": "ffff00",
+                "trigger": {
+                    "id": "L_ENG_FIRE",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "SlaveBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "L_ENG_FIRE",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 4,
+                    "boardType": "SlaveBoard"
+                }
+            },
+            {
+                "color": "ffff00",
+                "trigger": {
+                    "id": "APU_FIRE",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 5,
+                    "boardType": "SlaveBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "APU_FIRE",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 5,
+                    "boardType": "SlaveBoard"
+                }
+            },
+            {
+                "color": "ffff00",
+                "trigger": {
+                    "id": "R_ENG_FIRE",
+                    "value": 1,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 6,
+                    "boardType": "SlaveBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "R_ENG_FIRE",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 6,
+                    "boardType": "SlaveBoard"
+                }
+            },
+            {
+                "color": "000000",
+                "trigger": {
+                    "id": "R_ENG_FIRE",
+                    "value": 0,
+                    "comparator": "EqualTo"
+                },
+                "target": {
+                    "ledNumber": 6,
+                    "boardType": "SlaveBoard"
+                }
+            },
         ]
     }
 }
