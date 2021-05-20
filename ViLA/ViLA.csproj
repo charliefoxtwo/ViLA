@@ -4,8 +4,8 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
-        <AssemblyVersion>0.1.0</AssemblyVersion>
-        <FileVersion>0.1.0</FileVersion>
+        <AssemblyVersion>0.2.0</AssemblyVersion>
+        <FileVersion>0.2.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,7 +13,7 @@
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-      <PackageReference Include="ViLA.PluginBase" Version="1.0.0" />
+      <PackageReference Include="ViLA.PluginBase" Version="1.1.0" />
       <PackageReference Include="Virpil.Communicator" Version="1.2.0" />
     </ItemGroup>
 

@@ -39,21 +39,61 @@
 
                     "properties": {
                         "id": {
-                            "description": "The string bios code from dcs-bios to act on",
+                            "description": "The string id from the plugin to act on",
                             "type": "string"
                         },
                         "value": {
-                            "description": "The value to compare the dcs-bios value to",
-                            "type": "integer"
+                            "description": "The fixed value to compare the sent value to",
+                            "type": ["number", "string", "boolean"]
                         },
                         "comparator": {
                             "description": "The method to compare the dcs-bios value with. The equation should read as 'biosValue comparator value'",
                             "type": "string",
-                            "enum": ["GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo"]
+                            "enum": ["None", "GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo", "RegexMatch", "RegexNoMatch"]
                         }
                     },
                     "additionalProperties": false,
-                    "required": ["id", "value", "comparator"]
+                    "allOf": [
+                        {
+                            "if": {
+                                "properties": { "value": { "type": "number" } },
+                                "required": ["value"]
+                            },
+                            "then": {
+                                "properties": { "comparator": { "enum": ["GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo"] } },
+                                "required": ["id", "value", "comparator"]
+                            }
+                        },
+                        {
+                            "if": {
+                                "properties": { "value": { "type": "string" } },
+                                "required": ["value"]
+                            },
+                            "then": {
+                                "properties": { "comparator": { "enum": ["EqualTo", "NotEqualTo", "RegexMatch", "RegexNoMatch"] } },
+                                "required": ["id", "value", "comparator"]
+                            }
+                        },
+                        {
+                            "if": {
+                                "properties": { "value": { "type": "boolean" } },
+                                "required": ["value"]
+                            },
+                            "then": {
+                                "properties": { "comparator": { "enum": ["EqualTo", "NotEqualTo"] } },
+                                "required": ["id", "value", "comparator"]
+                            }
+                        },
+                        {
+                            "if": {
+                                "required": ["comparator"]
+                            },
+                            "then": {
+                                "required": ["id", "value", "comparator"]
+                            }
+                        }
+                    ],
+                    "required": ["id"]
                 }
             },
             

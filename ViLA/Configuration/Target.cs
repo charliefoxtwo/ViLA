@@ -1,9 +1,10 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable 8618
+
 using Virpil.Communicator;
 
-namespace ViLA
+namespace ViLA.Configuration
 {
     public class Target
     {
