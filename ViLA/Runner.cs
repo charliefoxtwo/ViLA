@@ -24,62 +24,68 @@ namespace ViLA
 
         private readonly ILogger<Runner> _log;
 
-        public Runner(IEnumerable<DeviceCommunicator> devices, Dictionary<string, List<LedAction>> deviceActions, List<PluginBase.PluginBase> plugins, ILogger<Runner> log)
+        public Runner(IEnumerable<DeviceCommunicator> devices, IDictionary<string, Device> deviceConfigs, List<PluginBase.PluginBase> plugins, ILogger<Runner> log)
         {
             _log = log;
             _plugins = plugins;
             _devices = devices.ToDictionary(d => d.PID, d => d);
 
-            foreach (var (device, actions) in deviceActions)
+            foreach (var (deviceId, device) in deviceConfigs)
             {
-                var deviceShort = ushort.Parse(device, NumberStyles.HexNumber);
-                foreach (var action in actions)
+                var deviceShort = ushort.Parse(deviceId, NumberStyles.HexNumber);
+                foreach (var (boardType, boardActions) in device)
                 {
-                    try
+                    foreach (var (ledNumber, ledActions) in boardActions)
                     {
-                        if (action.Trigger.TryGetLongTrigger(out var longTrigger))
+                        foreach (var action in ledActions)
                         {
-                            SetUpTrigger(_longActions, longTrigger, action, deviceShort);
+                            try
+                            {
+                                if (action.Trigger.TryGetLongTrigger(out var longTrigger))
+                                {
+                                    SetUpTrigger(_longActions, longTrigger, action, ledNumber, boardType, deviceShort);
+                                }
+                                else if (action.Trigger.TryGetStringTrigger(out var stringTrigger))
+                                {
+                                    SetUpTrigger(_stringActions, stringTrigger, action, ledNumber, boardType, deviceShort);
+                                }
+                                else if (action.Trigger.TryGetDoubleTrigger(out var doubleTrigger))
+                                {
+                                    SetUpTrigger(_doubleActions, doubleTrigger, action, ledNumber, boardType, deviceShort);
+                                }
+                                else if (action.Trigger.TryGetBoolTrigger(out var boolTrigger))
+                                {
+                                    SetUpTrigger(_boolActions, boolTrigger, action, ledNumber, boardType, deviceShort);
+                                }
+                                else if (action.Trigger.TryGetBasicTrigger(out var basicTrigger))
+                                {
+                                    SetUpTrigger(_basicActions, basicTrigger, action, ledNumber, boardType, deviceShort);
+                                }
+                                else
+                                {
+                                    log.LogError("Skipping action for {Id} because no supported trigger configuration was found",
+                                        action.Trigger.Id);
+                                }
+                            }
+                            catch (ArgumentException)
+                            {
+                                _log.LogError("Unsupported comparator passed for {Id}. Skipping...", action.Trigger.Id);
+                            }
                         }
-                        else if (action.Trigger.TryGetStringTrigger(out var stringTrigger))
-                        {
-                            SetUpTrigger(_stringActions, stringTrigger, action, deviceShort);
-                        }
-                        else if (action.Trigger.TryGetDoubleTrigger(out var doubleTrigger))
-                        {
-                            SetUpTrigger(_doubleActions, doubleTrigger, action, deviceShort);
-                        }
-                        else if (action.Trigger.TryGetBoolTrigger(out var boolTrigger))
-                        {
-                            SetUpTrigger(_boolActions, boolTrigger, action, deviceShort);
-                        }
-                        else if (action.Trigger.TryGetBasicTrigger(out var basicTrigger))
-                        {
-                            SetUpTrigger(_basicActions, basicTrigger, action, deviceShort);
-                        }
-                        else
-                        {
-                            log.LogError("Skipping action for {Id} because no supported trigger configuration was found",
-                                action.Trigger.Id);
-                        }
-                    }
-                    catch (ArgumentException)
-                    {
-                        _log.LogError("Unsupported comparator passed for {Id}. Skipping...", action.Trigger.Id);
                     }
                 }
             }
         }
 
         private static void SetUpTrigger<T>(IDictionary<string, List<DeviceAction<T>>> dict, T trigger,
-            LedAction ledAction, ushort deviceShort) where T : TriggerBase
+            LedAction ledAction, int ledNumber, BoardType boardType, ushort deviceShort) where T : TriggerBase
         {
             if (!dict.ContainsKey(ledAction.Trigger.Id))
             {
                 dict[ledAction.Trigger.Id] = new List<DeviceAction<T>>();
             }
 
-            dict[ledAction.Trigger.Id].Add(new DeviceAction<T>(ledAction.Color, trigger, ledAction.Target, deviceShort));
+            dict[ledAction.Trigger.Id].Add(new DeviceAction<T>(ledAction.Color, trigger, new Target(boardType, ledNumber), deviceShort));
         }
 
         public async Task Start(ILoggerFactory loggerFactory)

@@ -2,17 +2,17 @@
 // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable 8618
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Virpil.Communicator;
 
 namespace Configuration
 {
     public class Config
     {
-        public Dictionary<string, List<LedAction>> Devices { get; set; }
+        public Dictionary<string, Device> Devices { get; set; }
 
         /// <summary>
         /// Appends the devices of the provided config to this config.
@@ -20,18 +20,42 @@ namespace Configuration
         /// <param name="otherConfig"></param>
         public Config Append(Config otherConfig)
         {
-            foreach (var (device, actions) in otherConfig.Devices)
+            foreach (var (deviceId, device) in otherConfig.Devices)
             {
-                if (Devices.TryGetValue(device, out var deviceActions))
+                if (Devices.TryGetValue(deviceId, out var thisDevice))
                 {
-                    deviceActions.AddRange(actions);
+                    foreach (var (boardType, boardActions) in device)
+                    {
+                        if (Devices[deviceId].TryGetValue(boardType, out var thisBoardActions))
+                        {
+                            foreach (var (ledNumber, ledActions) in boardActions)
+                            {
+                                if (Devices[deviceId][boardType].TryGetValue(ledNumber, out var thisLedActions))
+                                {
+                                    thisLedActions.AddRange(ledActions);
+                                }
+                                else
+                                {
+                                    thisLedActions = ledActions;
+                                }
+
+                                Devices[deviceId][boardType][ledNumber] = thisLedActions;
+                            }
+                        }
+                        else
+                        {
+                            thisBoardActions = boardActions;
+                        }
+
+                        Devices[deviceId][boardType] = thisBoardActions;
+                    }
                 }
                 else
                 {
-                    deviceActions = new List<LedAction>(actions);
+                    thisDevice = device;
                 }
 
-                Devices[device] = deviceActions;
+                Devices[deviceId] = thisDevice;
             }
 
             return this;
@@ -44,5 +68,13 @@ namespace Configuration
                 .Where(c => c != null)
                 .Aggregate((s, t) => s!.Append(t!));
         }
+    }
+
+    public class Device : Dictionary<BoardType, BoardActions>
+    {
+    }
+
+    public class BoardActions : Dictionary<int, List<LedAction>>
+    {
     }
 }

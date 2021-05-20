@@ -1,0 +1,153 @@
+{
+    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/Configuration/Schema/ActionConfiguration.json.schema",
+    "devices": {
+        "825B": {
+            "OnBoard": {
+                "1": [
+                    {
+                        "color": "ff8000",
+                        "trigger": {
+                            "id": "MASTER_CAUTION_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "MASTER_CAUTION_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ],
+                "2": [
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "MASTER_MODE_AA_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "00ff00",
+                        "trigger": {
+                            "id": "MASTER_MODE_AA_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ],
+                "3": [
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "FIRE_APU_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "ff0000",
+                        "trigger": {
+                            "id": "FIRE_APU_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ],
+                "4": [
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "MASTER_MODE_AG_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "00ff00",
+                        "trigger": {
+                            "id": "MASTER_MODE_AG_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ],
+                "6": [
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "LANDING_GEAR_HANDLE_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "ff0000",
+                        "trigger": {
+                            "id": "LANDING_GEAR_HANDLE_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ],
+                "8": [
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "FLP_LG_LEFT_GEAR_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "00ff00",
+                        "trigger": {
+                            "id": "FLP_LG_LEFT_GEAR_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ],
+                "9": [
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "FLP_LG_NOSE_GEAR_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "00ff00",
+                        "trigger": {
+                            "id": "FLP_LG_NOSE_GEAR_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ],
+                "10": [
+                    {
+                        "color": "000000",
+                        "trigger": {
+                            "id": "FLP_LG_RIGHT_GEAR_LT",
+                            "value": 0,
+                            "comparator": "EqualTo"
+                        }
+                    },
+                    {
+                        "color": "00ff00",
+                        "trigger": {
+                            "id": "FLP_LG_RIGHT_GEAR_LT",
+                            "value": 1,
+                            "comparator": "EqualTo"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

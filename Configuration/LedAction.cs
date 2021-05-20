@@ -8,6 +8,5 @@ namespace Configuration
     {
         public string Color { get; set; }
         public Trigger Trigger { get; set; }
-        public Target Target { get; set; }
     }
 }
