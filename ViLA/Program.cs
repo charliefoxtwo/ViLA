@@ -16,16 +16,19 @@ namespace ViLA
 
         public static async Task Main(string[] args)
         {
-            var loggerFactory = LoggerFactory.Create(c => c.SetMinimumLevel(LogLevel.Information).AddConsole());
-            _log = loggerFactory.CreateLogger<Program>();
 
             var cfg = Config.GetAllConfiguration();
 
             if (cfg is null)
             {
-                _log.LogCritical("Config files are empty or error loading config files, exiting...");
+                var lf = LoggerFactory.Create(c => c.SetMinimumLevel(LogLevel.Information).AddConsole());
+
+                lf.CreateLogger<Program>().LogCritical("Config files are empty or error loading config files, exiting...");
                 return;
             }
+
+            var loggerFactory = LoggerFactory.Create(c => c.SetMinimumLevel(cfg.LogLevel ?? LogLevel.Information).AddConsole());
+            _log = loggerFactory.CreateLogger<Program>();
 
             const bool pluginsEnabled = true;
 

@@ -2,9 +2,11 @@
 // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable 8618
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Virpil.Communicator;
 
@@ -12,7 +14,8 @@ namespace Configuration
 {
     public class Config
     {
-        public Dictionary<string, Device> Devices { get; set; }
+        public LogLevel? LogLevel { get; set; }
+        public Dictionary<string, Device>? Devices { get; set; }
 
         /// <summary>
         /// Appends the devices of the provided config to this config.
@@ -20,42 +23,52 @@ namespace Configuration
         /// <param name="otherConfig"></param>
         public Config Append(Config otherConfig)
         {
-            foreach (var (deviceId, device) in otherConfig.Devices)
+            if (otherConfig.LogLevel is not null)
             {
-                if (Devices.TryGetValue(deviceId, out var thisDevice))
+                LogLevel = (LogLevel) Math.Min((int) (LogLevel ?? Microsoft.Extensions.Logging.LogLevel.None),
+                    (int) otherConfig.LogLevel);
+            }
+
+            if (otherConfig.Devices != null)
+            {
+                if (Devices is null) Devices = new Dictionary<string, Device>();
+                foreach (var (deviceId, device) in otherConfig.Devices)
                 {
-                    foreach (var (boardType, boardActions) in device)
+                    if (Devices.TryGetValue(deviceId, out var thisDevice))
                     {
-                        if (Devices[deviceId].TryGetValue(boardType, out var thisBoardActions))
+                        foreach (var (boardType, boardActions) in device)
                         {
-                            foreach (var (ledNumber, ledActions) in boardActions)
+                            if (Devices[deviceId].TryGetValue(boardType, out var thisBoardActions))
                             {
-                                if (Devices[deviceId][boardType].TryGetValue(ledNumber, out var thisLedActions))
+                                foreach (var (ledNumber, ledActions) in boardActions)
                                 {
-                                    thisLedActions.AddRange(ledActions);
-                                }
-                                else
-                                {
-                                    thisLedActions = ledActions;
-                                }
+                                    if (Devices[deviceId][boardType].TryGetValue(ledNumber, out var thisLedActions))
+                                    {
+                                        thisLedActions.AddRange(ledActions);
+                                    }
+                                    else
+                                    {
+                                        thisLedActions = ledActions;
+                                    }
 
-                                Devices[deviceId][boardType][ledNumber] = thisLedActions;
+                                    Devices[deviceId][boardType][ledNumber] = thisLedActions;
+                                }
                             }
-                        }
-                        else
-                        {
-                            thisBoardActions = boardActions;
-                        }
+                            else
+                            {
+                                thisBoardActions = boardActions;
+                            }
 
-                        Devices[deviceId][boardType] = thisBoardActions;
+                            Devices[deviceId][boardType] = thisBoardActions;
+                        }
                     }
-                }
-                else
-                {
-                    thisDevice = device;
-                }
+                    else
+                    {
+                        thisDevice = device;
+                    }
 
-                Devices[deviceId] = thisDevice;
+                    Devices[deviceId] = thisDevice;
+                }
             }
 
             return this;

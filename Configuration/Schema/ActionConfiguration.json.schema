@@ -105,6 +105,11 @@
     },
 
     "properties": {
+        "logLevel": {
+            "description": "The level to log at",
+            "type": "string",
+            "enum": ["NONE", "TRACE", "DEBUG", "INFORMATION", "WARNING", "ERROR", "CRITICAL"]
+        },
         "devices": {
             "description": "All devices and device actions go here. The key is the device's USB PID.",
             "type": "object",
