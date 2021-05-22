@@ -1,0 +1,78 @@
+name: release ci
+
+on:
+  push:
+    branches:
+      - "release/*"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            runtime: win-x64
+          - os: macos-latest
+            runtime: osx-x64
+          - os: ubuntu-latest
+            runtime: linux-x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+      - name: Publish
+        run: dotnet publish ViLA --configuration Release --runtime ${{ matrix.runtime }} --output build/artifacts/${{ matrix.runtime }} -p:PublishSingleFile=true -p:DebugType=None --no-self-contained
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.runtime }}
+          path: build/artifacts/${{ matrix.runtime }}
+
+  publish:
+    needs: build
+
+    if: github.event_name == 'push'
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Download Artifacts win-x64
+        uses: actions/download-artifact@v1
+        with:
+          name: win-x64
+
+      - name: Download Artifacts osx-x64
+        uses: actions/download-artifact@v1
+        with:
+          name: osx-x64
+
+      - name: Download Artifacts linux-x64
+        uses: actions/download-artifact@v1
+        with:
+          name: linux-x64
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "release-client"
+          release_name: "RC"
+          body: "### This build may not work\nThis is the most recent pre-release build. It may have breaking changes, and/or it may not work at all. It should be more stable than the latest alpha build, but no promises."
+          draft: false
+          prerelease: true
