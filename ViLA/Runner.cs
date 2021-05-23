@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace ViLA
 {
     public class Runner
     {
-        private readonly Dictionary<ushort, DeviceCommunicator> _devices;
         private readonly List<PluginBase.PluginBase> _plugins;
+        private readonly VirpilMonitor _monitor;
 
         // id => action
         private readonly Dictionary<string, List<DeviceAction<TriggerBase<long>>>> _longActions = new();
@@ -24,11 +25,11 @@ namespace ViLA
 
         private readonly ILogger<Runner> _log;
 
-        public Runner(IEnumerable<DeviceCommunicator> devices, IDictionary<string, Device> deviceConfigs, List<PluginBase.PluginBase> plugins, ILogger<Runner> log)
+        public Runner(VirpilMonitor deviceMonitor, IDictionary<string, Device> deviceConfigs, List<PluginBase.PluginBase> plugins, ILogger<Runner> log)
         {
             _log = log;
             _plugins = plugins;
-            _devices = devices.ToDictionary(d => d.PID, d => d);
+            _monitor = deviceMonitor;
 
             foreach (var (deviceId, device) in deviceConfigs)
             {
@@ -145,7 +146,7 @@ namespace ViLA
             _log.LogTrace("got {Type} data {Data} for {Id}", nameof(T), value, id);
             foreach (var action in actions.Where(action => action.Trigger.ShouldTrigger(value)))
             {
-                if (!_devices.TryGetValue(action.Device, out var device)) continue;
+                if (!_monitor.TryGetDevice(action.Device, out var device)) continue;
 
                 _log.LogDebug("Triggering {Id}", id);
                 var (red, green, blue) = action.Color.ToLedPowers();
@@ -160,7 +161,7 @@ namespace ViLA
             _log.LogTrace("got trigger for {Id}", id);
             foreach (var action in actions)
             {
-                if (!_devices.TryGetValue(action.Device, out var device)) continue;
+                if (!_monitor.TryGetDevice(action.Device, out var device)) continue;
 
                 _log.LogDebug("Triggering {Id}", id);
                 var (red, green, blue) = action.Color.ToLedPowers();

@@ -44,7 +44,8 @@ namespace ViLA
                 plugins.Add(plugin);
             }
 
-            var devices = DeviceCommunicator.AllConnectedVirpilDevices(loggerFactory).ToList();
+            var monitor = VirpilMonitor.Initialize(loggerFactory);
+            var devices = monitor.AllConnectedVirpilDevices;
 
             _log.LogInformation("Detected {DeviceNumber} devices", devices.Count);
             foreach (var device in devices)
@@ -62,7 +63,7 @@ namespace ViLA
                 }
             }
 
-            var r = new Runner(devices, cfg.Devices ?? new Dictionary<string, Device>(), plugins, loggerFactory.CreateLogger<Runner>());
+            var r = new Runner(monitor, cfg.Devices ?? new Dictionary<string, Device>(), plugins, loggerFactory.CreateLogger<Runner>());
 
             await r.Start(loggerFactory);
 
