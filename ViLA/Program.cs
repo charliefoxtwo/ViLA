@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Configuration;
 using McMaster.NETCore.Plugins;
@@ -33,29 +35,38 @@ namespace ViLA
             var loggerFactory = LoggerFactory.Create(c => c.SetMinimumLevel(cfg.LogLevel ?? LogLevel.Information).AddConsole());
             _log = loggerFactory.CreateLogger<Program>();
 
-            const bool pluginsEnabled = true;
+            await CheckProgramVersion(cfg.CheckPrerelease);
 
             var plugins = new List<PluginBase.PluginBase>();
-            if (pluginsEnabled)
+
+            await foreach (var plugin in LoadPlugins(cfg.DisabledPlugins, cfg.CheckUpdates, cfg.CheckPrerelease))
             {
-                await foreach (var plugin in LoadPlugins(cfg.DisabledPlugins, cfg.CheckUpdates, cfg.CheckPrerelease))
-                {
-                    plugins.Add(plugin);
-                }
+                plugins.Add(plugin);
             }
 
             var devices = DeviceCommunicator.AllConnectedVirpilDevices(loggerFactory).ToList();
 
+            _log.LogInformation("Detected {DeviceNumber} devices", devices.Count);
             foreach (var device in devices)
             {
                 _log.LogInformation("Detected device with PID {Device:x4}", device.PID);
+
+                try
+                {
+                    device.SendCommand(BoardType.Default, 1, LedPower.Zero, LedPower.Zero, LedPower.Zero);
+                    _log.LogDebug("Leds reset for {Device:x4}", device.PID);
+                }
+                catch(Exception)
+                {
+                    _log.LogError("Exception when resetting leds - try restarting your application?");
+                }
             }
 
-            var r = new Runner(devices, cfg.Devices, plugins, loggerFactory.CreateLogger<Runner>());
+            var r = new Runner(devices, cfg.Devices ?? new Dictionary<string, Device>(), plugins, loggerFactory.CreateLogger<Runner>());
 
             await r.Start(loggerFactory);
 
-            await Task.Delay(-1);
+            await Task.Delay(-1, new CancellationToken());
         }
 
         private static async IAsyncEnumerable<PluginBase.PluginBase> LoadPlugins(IReadOnlySet<string> disabledPlugins, bool checkUpdates = true, bool checkPrerelease = false)
@@ -106,39 +117,62 @@ namespace ViLA
             }
         }
 
+        private static async Task CheckProgramVersion(bool checkPrerelease)
+        {
+            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            const string githubUrl = "https://api.github.com/repos/charliefoxtwo/ViLA/releases";
+            await CheckVersionAgainstGithub("ViLA", currentVersion, githubUrl, checkPrerelease);
+        }
+
         private static async Task CheckPluginVersion(PluginManifest pluginManifest, bool checkPrerelease)
         {
             if (pluginManifest.Releases is null || pluginManifest.Version is null) return;
 
             if (Version.TryParse(pluginManifest.Version, out var currentVersion))
             {
-                var client = new RestClient();
-                client.UseNewtonsoftJson();
-                var request = new RestRequest(pluginManifest.Releases);
-                var response = await client.GetAsync<List<GithubReleaseResponse>>(request);
-
-                var latestRelevantRelease = response.FirstOrDefault(r => !r.Draft && (checkPrerelease || !r.Prerelease));
-                if (latestRelevantRelease is not null)
-                {
-                    // we need a version to work with, otherwise we can't really know if it's newer
-                    if (Version.TryParse(latestRelevantRelease.TagName, out var latestVersion) || Version.TryParse(latestRelevantRelease.Name, out latestVersion))
-                    {
-                        if (latestVersion.CompareTo(currentVersion) > 0)
-                        {
-                            _log.LogWarning(
-                                "A newer version of {Plugin} is available! Consider downloading it here {PluginReleaseUrl}",
-                                pluginManifest.Entrypoint, latestRelevantRelease.HtmlUrl);
-                        }
-                        else
-                        {
-                            _log.LogDebug("{Plugin} v{Version} is up to date", pluginManifest.Entrypoint, latestVersion);
-                        }
-                    }
-                }
+                await CheckVersionAgainstGithub(pluginManifest.Entrypoint, currentVersion, pluginManifest.Releases,
+                    checkPrerelease);
             }
             else
             {
                 _log.LogWarning("Unable to parse version for {Plugin}, skipping update check...", pluginManifest.Entrypoint);
+            }
+        }
+
+        private static async Task CheckVersionAgainstGithub(string name, Version currentVersion, string githubUrl, bool checkPrerelease)
+        {
+            var client = new RestClient();
+            client.UseNewtonsoftJson();
+            var request = new RestRequest(githubUrl);
+            List<GithubReleaseResponse> response;
+            try
+            {
+                response = await client.GetAsync<List<GithubReleaseResponse>>(request);
+            }
+            catch (JsonSerializationException ex)
+            {
+                // probably a github rate limit. we'll just skip for now
+                return;
+            }
+
+            var latestRelevantRelease = response.FirstOrDefault(r => !r.Draft && (checkPrerelease || !r.Prerelease) &&
+                                                                     (Version.TryParse(r.Name, out _) || Version.TryParse(r.TagName, out _)));
+            if (latestRelevantRelease is not null)
+            {
+                // we need a version to work with, otherwise we can't really know if it's newer
+                if (Version.TryParse(latestRelevantRelease.TagName, out var latestVersion) || Version.TryParse(latestRelevantRelease.Name, out latestVersion))
+                {
+                    if (latestVersion.CompareTo(currentVersion) > 0)
+                    {
+                        _log.LogWarning(
+                            "A newer version of {Plugin} is available! Consider downloading it here {PluginReleaseUrl}",
+                            name, latestRelevantRelease.HtmlUrl);
+                    }
+                    else
+                    {
+                        _log.LogDebug("{Plugin} v{Version} is up to date", name, latestVersion);
+                    }
+                }
             }
         }
     }
