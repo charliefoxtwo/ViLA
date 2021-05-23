@@ -11,15 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="Configuration\A-10C.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="Configuration\FA-18C.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
-      <Content Include="Configuration\UH-1H.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
       <Content Include="Configuration\ViLA.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
