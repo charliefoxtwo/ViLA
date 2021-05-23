@@ -80,7 +80,7 @@ namespace Configuration
 
         public static Config? GetAllConfiguration()
         {
-            return Directory.EnumerateFiles("Configuration", "*.json").AsParallel()
+            return Directory.EnumerateFiles("Configuration", "*.json", SearchOption.AllDirectories).AsParallel()
                 .Select(f => JsonConvert.DeserializeObject<Config>(File.ReadAllText(f)))
                 .Where(c => c != null)
                 .Aggregate((s, t) => s!.Append(t!));
