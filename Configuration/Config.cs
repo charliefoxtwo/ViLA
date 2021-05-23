@@ -17,6 +17,8 @@ namespace Configuration
         public LogLevel? LogLevel { get; set; }
         public bool CheckUpdates { get; set; } = true;
         public bool CheckPrerelease { get; set; } = false;
+        public HashSet<string> DisabledPlugins { get; set; } = new();
+
         public Dictionary<string, Device>? Devices { get; set; }
 
         /// <summary>

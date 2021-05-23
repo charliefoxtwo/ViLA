@@ -119,7 +119,15 @@
             "description": "Determines whether or not the application should consider prerelease plugin releases when checking for updates.",
             "type": "boolean",
             "default": false
-        }
+        },
+        "disabledPlugins": {
+            "description": "Plugins which should not be loaded on the next run.",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "examples": [[ "DcsBiosReader.dll", "SamplePlugin.dll" ]]
+        },
         "devices": {
             "description": "All devices and device actions go here. The key is the device's USB PID.",
             "type": "object",

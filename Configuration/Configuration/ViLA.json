@@ -2,5 +2,6 @@
     "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/Configuration/Schema/ActionConfiguration.json.schema",
     "logLevel": "information",
     "checkUpdates": true,
-    "checkPrerelease": false
+    "checkPrerelease": false,
+    "disabledPlugins": [ ]
 }

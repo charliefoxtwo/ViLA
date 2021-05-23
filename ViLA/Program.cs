@@ -38,7 +38,7 @@ namespace ViLA
             var plugins = new List<PluginBase.PluginBase>();
             if (pluginsEnabled)
             {
-                await foreach (var plugin in LoadPlugins(cfg.CheckUpdates, cfg.CheckPrerelease))
+                await foreach (var plugin in LoadPlugins(cfg.DisabledPlugins, cfg.CheckUpdates, cfg.CheckPrerelease))
                 {
                     plugins.Add(plugin);
                 }
@@ -58,7 +58,7 @@ namespace ViLA
             await Task.Delay(-1);
         }
 
-        private static async IAsyncEnumerable<PluginBase.PluginBase> LoadPlugins(bool checkUpdates = true, bool checkPrerelease = false)
+        private static async IAsyncEnumerable<PluginBase.PluginBase> LoadPlugins(IReadOnlySet<string> disabledPlugins, bool checkUpdates = true, bool checkPrerelease = false)
         {
             if (!Directory.Exists("./Plugins")) Directory.CreateDirectory("./Plugins");
             var manifests = Directory.EnumerateFiles("./Plugins", "manifest.json", SearchOption.AllDirectories);
@@ -74,6 +74,8 @@ namespace ViLA
                     _log.LogWarning("Error loading manifest {ManifestFile}. Skipping...", manifest);
                     continue;
                 }
+
+                if (disabledPlugins.Contains(pluginManifest.Entrypoint)) continue;
 
                 if (checkUpdates)
                 {
