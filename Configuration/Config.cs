@@ -33,6 +33,10 @@ namespace Configuration
                     (int) otherConfig.LogLevel);
             }
 
+            if (otherConfig.CheckPrerelease) CheckPrerelease = otherConfig.CheckPrerelease;
+            if (otherConfig.CheckUpdates) CheckUpdates = otherConfig.CheckUpdates;
+            DisabledPlugins.UnionWith(otherConfig.DisabledPlugins);
+
             if (otherConfig.Devices != null)
             {
                 if (Devices is null) Devices = new Dictionary<string, Device>();
