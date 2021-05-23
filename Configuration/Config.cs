@@ -15,6 +15,8 @@ namespace Configuration
     public class Config
     {
         public LogLevel? LogLevel { get; set; }
+        public bool CheckUpdates { get; set; } = true;
+        public bool CheckPrerelease { get; set; } = false;
         public Dictionary<string, Device>? Devices { get; set; }
 
         /// <summary>

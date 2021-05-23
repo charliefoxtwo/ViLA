@@ -1,4 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/Configuration/Schema/ActionConfiguration.json.schema",
-    "logLevel": "information"
+    "logLevel": "information",
+    "checkUpdates": true,
+    "checkPrerelease": false
 }

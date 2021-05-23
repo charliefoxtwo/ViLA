@@ -110,6 +110,16 @@
             "type": "string",
             "enum": ["NONE", "TRACE", "DEBUG", "INFORMATION", "WARNING", "ERROR", "CRITICAL"]
         },
+        "checkUpdates": {
+            "description": "Determines whether or not the application should check for plugin updates on start.",
+            "type": "boolean",
+            "default": true
+        },
+        "checkPrerelease": {
+            "description": "Determines whether or not the application should consider prerelease plugin releases when checking for updates.",
+            "type": "boolean",
+            "default": false
+        }
         "devices": {
             "description": "All devices and device actions go here. The key is the device's USB PID.",
             "type": "object",
