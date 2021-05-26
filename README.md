@@ -56,7 +56,7 @@ Not directly, no. You can get creative with the plugin and the Ids in your confi
 
 If making package changes (highly discouraged) it is important to regenerate the plugin_manifest.xml file. This can be done with the following command: `dotnet store -m ViLA.csproj --runtime win-x64 -f net5.0`
 
-This command will output `%userprofile%/.dotnet/store/x64/net5.0/artifacts.xml`, among other things. Make sure to replace the current plugin_manifest.xml file with this one.
+This command will output `%userprofile%/.dotnet/store/x64/net5.0/artifact.xml`, among other things. Make sure to replace the current plugin_manifest.xml file with this one.
 
 ## Acknowledgements
 

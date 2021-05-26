@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ViLA.Triggers
+namespace Configuration
 {
     public abstract class TriggerBase<T> : TriggerBase
     {

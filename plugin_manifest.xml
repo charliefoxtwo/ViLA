@@ -1,22 +1,25 @@
 <StoreArtifacts>
+  <Package Id="Newtonsoft.Json" Version="13.0.1" />
+  <Package Id="HidSharp" Version="2.1.0" />
+  <Package Id="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
+  <Package Id="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  <Package Id="Microsoft.Extensions.Logging" Version="5.0.0" />
+  <Package Id="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  <Package Id="Microsoft.Extensions.Options" Version="5.0.0" />
+  <Package Id="Microsoft.Extensions.Primitives" Version="5.0.0" />
+  <Package Id="Virpil.Communicator" Version="2.0.0" />
   <Package Id="McMaster.NETCore.Plugins" Version="1.3.1" />
   <Package Id="Microsoft.DotNet.PlatformAbstractions" Version="3.1.0" />
   <Package Id="Microsoft.Extensions.DependencyModel" Version="3.1.0" />
   <Package Id="System.Text.Json" Version="4.7.0" />
-  <Package Id="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
   <Package Id="Microsoft.Extensions.Configuration" Version="5.0.0" />
   <Package Id="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
   <Package Id="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
-  <Package Id="Microsoft.Extensions.DependencyInjection" Version="5.0.0" />
-  <Package Id="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
-  <Package Id="Microsoft.Extensions.Logging" Version="5.0.0" />
   <Package Id="Microsoft.Extensions.Logging.Configuration" Version="5.0.0" />
   <Package Id="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-  <Package Id="Microsoft.Extensions.Options" Version="5.0.0" />
   <Package Id="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-  <Package Id="Microsoft.Extensions.Primitives" Version="5.0.0" />
-  <Package Id="Newtonsoft.Json" Version="13.0.1" />
+  <Package Id="RestSharp" Version="106.11.7" />
+  <Package Id="Newtonsoft.Json" Version="12.0.3" />
+  <Package Id="RestSharp.Serializers.NewtonsoftJson" Version="106.11.7" />
   <Package Id="ViLA.PluginBase" Version="1.1.0" />
-  <Package Id="hidlibrary" Version="3.3.40" />
-  <Package Id="Virpil.Communicator" Version="1.2.0" />
 </StoreArtifacts>

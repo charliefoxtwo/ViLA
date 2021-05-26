@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Configuration;
 
 namespace ViLA.Triggers
 {

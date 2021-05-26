@@ -1,4 +1,4 @@
-﻿namespace ViLA
+﻿namespace Configuration
 {
     public enum Comparator
     {

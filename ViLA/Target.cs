@@ -4,11 +4,7 @@
 
 using Virpil.Communicator;
 
-namespace ViLA.Configuration
+namespace ViLA
 {
-    public class Target
-    {
-        public BoardType BoardType { get; set; }
-        public int LedNumber { get; set; }
-    }
+    public record Target(BoardType BoardType, int LedNumber);
 }

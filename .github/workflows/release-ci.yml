@@ -1,0 +1,80 @@
+name: release ci
+
+on:
+  push:
+    branches:
+      - "release/*"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        include:
+          - os: windows-latest
+            runtime: win-x64
+          - os: macos-latest
+            runtime: osx-x64
+          - os: ubuntu-latest
+            runtime: linux-x64
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+      - name: Publish
+        run: cd ViLA && dotnet publish --configuration Release --runtime ${{ matrix.runtime }} -p:PublishSingleFile=true -p:DebugType=None --no-self-contained -o publish
+
+      - name: Zip Folder
+        run: cd ViLA/publish/ && zip -r ViLA-${{ matrix.runtime }}.zip . && mkdir -p ../../build/artifacts/${{ matrix.runtime }}/ && cp -r ViLA-${{ matrix.runtime }}.zip ../../build/artifacts/${{ matrix.runtime }}/
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.runtime }}
+          path: build/artifacts/${{ matrix.runtime }}
+
+  publish:
+    needs: build
+
+    if: github.event_name == 'push'
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Download Artifacts win-x64
+        uses: actions/download-artifact@v1
+        with:
+          name: win-x64
+
+      - name: Download Artifacts osx-x64
+        uses: actions/download-artifact@v1
+        with:
+          name: osx-x64
+
+      - name: Download Artifacts linux-x64
+        uses: actions/download-artifact@v1
+        with:
+          name: linux-x64
+
+      - name: Create Release
+        id: create_release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true
+          title: "RC"
+          files: |
+            **/ViLA-*.zip
