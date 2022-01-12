@@ -10,92 +10,91 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Virpil.Communicator;
 
-namespace Configuration
+namespace Configuration;
+
+public class Config
 {
-    public class Config
+    public LogLevel? LogLevel { get; set; }
+    public bool CheckUpdates { get; set; } = true;
+    public bool CheckPrerelease { get; set; } = false;
+    public HashSet<string> DisabledPlugins { get; set; } = new();
+
+    public Dictionary<string, Device>? Devices { get; set; }
+
+    /// <summary>
+    /// Appends the devices of the provided config to this config.
+    /// </summary>
+    /// <param name="otherConfig"></param>
+    public Config Append(Config otherConfig)
     {
-        public LogLevel? LogLevel { get; set; }
-        public bool CheckUpdates { get; set; } = true;
-        public bool CheckPrerelease { get; set; } = false;
-        public HashSet<string> DisabledPlugins { get; set; } = new();
-
-        public Dictionary<string, Device>? Devices { get; set; }
-
-        /// <summary>
-        /// Appends the devices of the provided config to this config.
-        /// </summary>
-        /// <param name="otherConfig"></param>
-        public Config Append(Config otherConfig)
+        if (otherConfig.LogLevel is not null)
         {
-            if (otherConfig.LogLevel is not null)
-            {
-                LogLevel = (LogLevel) Math.Min((int) (LogLevel ?? Microsoft.Extensions.Logging.LogLevel.None),
-                    (int) otherConfig.LogLevel);
-            }
+            LogLevel = (LogLevel) Math.Min((int) (LogLevel ?? Microsoft.Extensions.Logging.LogLevel.None),
+                (int) otherConfig.LogLevel);
+        }
 
-            if (otherConfig.CheckPrerelease) CheckPrerelease = otherConfig.CheckPrerelease;
-            if (otherConfig.CheckUpdates) CheckUpdates = otherConfig.CheckUpdates;
-            DisabledPlugins.UnionWith(otherConfig.DisabledPlugins);
+        if (otherConfig.CheckPrerelease) CheckPrerelease = otherConfig.CheckPrerelease;
+        if (otherConfig.CheckUpdates) CheckUpdates = otherConfig.CheckUpdates;
+        DisabledPlugins.UnionWith(otherConfig.DisabledPlugins);
 
-            if (otherConfig.Devices != null)
+        if (otherConfig.Devices != null)
+        {
+            if (Devices is null) Devices = new Dictionary<string, Device>();
+            foreach (var (deviceId, device) in otherConfig.Devices)
             {
-                if (Devices is null) Devices = new Dictionary<string, Device>();
-                foreach (var (deviceId, device) in otherConfig.Devices)
+                if (Devices.TryGetValue(deviceId, out var thisDevice))
                 {
-                    if (Devices.TryGetValue(deviceId, out var thisDevice))
+                    foreach (var (boardType, boardActions) in device)
                     {
-                        foreach (var (boardType, boardActions) in device)
+                        if (Devices[deviceId].TryGetValue(boardType, out var thisBoardActions))
                         {
-                            if (Devices[deviceId].TryGetValue(boardType, out var thisBoardActions))
+                            foreach (var (ledNumber, ledActions) in boardActions)
                             {
-                                foreach (var (ledNumber, ledActions) in boardActions)
+                                if (Devices[deviceId][boardType].TryGetValue(ledNumber, out var thisLedActions))
                                 {
-                                    if (Devices[deviceId][boardType].TryGetValue(ledNumber, out var thisLedActions))
-                                    {
-                                        thisLedActions.AddRange(ledActions);
-                                    }
-                                    else
-                                    {
-                                        thisLedActions = ledActions;
-                                    }
-
-                                    Devices[deviceId][boardType][ledNumber] = thisLedActions;
+                                    thisLedActions.AddRange(ledActions);
                                 }
-                            }
-                            else
-                            {
-                                thisBoardActions = boardActions;
-                            }
+                                else
+                                {
+                                    thisLedActions = ledActions;
+                                }
 
-                            Devices[deviceId][boardType] = thisBoardActions;
+                                Devices[deviceId][boardType][ledNumber] = thisLedActions;
+                            }
                         }
-                    }
-                    else
-                    {
-                        thisDevice = device;
-                    }
+                        else
+                        {
+                            thisBoardActions = boardActions;
+                        }
 
-                    Devices[deviceId] = thisDevice;
+                        Devices[deviceId][boardType] = thisBoardActions;
+                    }
                 }
+                else
+                {
+                    thisDevice = device;
+                }
+
+                Devices[deviceId] = thisDevice;
             }
-
-            return this;
         }
 
-        public static Config? GetAllConfiguration()
-        {
-            return Directory.EnumerateFiles("Configuration", "*.json", SearchOption.AllDirectories).AsParallel()
-                .Select(f => JsonConvert.DeserializeObject<Config>(File.ReadAllText(f)))
-                .Where(c => c != null)
-                .Aggregate((s, t) => s!.Append(t!));
-        }
+        return this;
     }
 
-    public class Device : Dictionary<BoardType, BoardActions>
+    public static Config? GetAllConfiguration()
     {
+        return Directory.EnumerateFiles("Configuration", "*.json", SearchOption.AllDirectories).AsParallel()
+            .Select(f => JsonConvert.DeserializeObject<Config>(File.ReadAllText(f)))
+            .Where(c => c != null)
+            .Aggregate((s, t) => s!.Append(t!));
     }
+}
 
-    public class BoardActions : Dictionary<int, List<LedAction>>
-    {
-    }
+public class Device : Dictionary<BoardType, BoardActions>
+{
+}
+
+public class BoardActions : Dictionary<int, List<LedAction>>
+{
 }

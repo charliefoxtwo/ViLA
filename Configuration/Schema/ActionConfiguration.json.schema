@@ -9,7 +9,7 @@
             "title": "LED Action",
             "description": "An action to take for a USB LED",
             "type": "array",
-            
+
             "definitions": {
                 "action": {
                     "title": "Action",
@@ -29,12 +29,18 @@
                                 },
                                 "value": {
                                     "description": "The fixed value to compare the sent value to",
-                                    "type": ["number", "string", "boolean"]
+                                    "oneOf": [
+                                        {"type": "number"},
+                                        {"type": "string"},
+                                        {"type": "boolean"},
+                                        {"$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"},
+                                        {"type": "array", "items": {"$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"}}
+                                    ]
                                 },
                                 "comparator": {
                                     "description": "The method to compare the dcs-bios value with. The equation should read as 'biosValue comparator value'",
                                     "type": "string",
-                                    "enum": ["None", "GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo", "RegexMatch", "RegexNoMatch"]
+                                    "enum": ["None", "GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo", "RegexMatch", "RegexNoMatch", "And", "Or", "Xor", "Not"]
                                 }
                             },
                             "additionalProperties": false,
@@ -71,10 +77,30 @@
                                 },
                                 {
                                     "if": {
+                                        "properties": { "value": { "$ref": "#/definitions/ledAction/definitions/action/definitions/trigger" } },
+                                        "required": ["value"]
+                                    },
+                                    "then": {
+                                        "properties": { "comparator": { "enum": ["Not"] } },
+                                        "required": ["id", "value", "comparator"]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": { "value": { "type": "array", "items": {"$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"}}},
+                                        "required": ["value"]
+                                    },
+                                    "then": {
+                                        "properties": { "comparator": { "enum": ["And", "Or", "Xor"] } },
+                                        "required": ["value", "comparator"]
+                                    }
+                                },
+                                {
+                                    "if": {
                                         "required": ["comparator"]
                                     },
                                     "then": {
-                                        "required": ["id", "value", "comparator"]
+                                        "required": ["value", "comparator"]
                                     }
                                 }
                             ],
