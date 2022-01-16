@@ -22,7 +22,7 @@ public class Program
     public static async Task Main(string[] args)
     {
 
-        var cfg = Config.GetAllConfiguration();
+        var cfg = VilaConfiguration.GetVilaConfiguration();
 
         if (cfg is null)
         {
@@ -63,7 +63,10 @@ public class Program
             }
         }
 
-        using var r = new Runner(monitor, cfg.Devices ?? new Dictionary<string, Device>(), plugins, loggerFactory.CreateLogger<Runner>());
+        var deviceConfigs = DeviceConfiguration.GetDeviceConfigurations();
+
+        using var r = new Runner(monitor, deviceConfigs.Values.Where(c => c != null).Select(c => c!), plugins,
+            loggerFactory.CreateLogger<Runner>());
 
         await r.Start(loggerFactory);
 

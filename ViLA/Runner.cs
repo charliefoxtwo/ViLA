@@ -20,32 +20,40 @@ public class Runner : IDisposable
 
     private readonly ILogger<Runner> _log;
 
-    // TODO: remember, we need to store the sub-items of a logical statement, and then trigger that logical
-    //       statement when a child changes...
     private readonly State _state = new();
 
-    public Runner(VirpilMonitor deviceMonitor, IDictionary<string, Device> deviceConfigs, List<PluginBase.PluginBase> plugins, ILogger<Runner> log)
+    public Runner(VirpilMonitor deviceMonitor, IEnumerable<DeviceConfiguration> deviceConfigs, List<PluginBase.PluginBase> plugins, ILogger<Runner> log)
     {
         _log = log;
         _plugins = plugins;
         _monitor = deviceMonitor;
 
-        foreach (var (deviceId, device) in deviceConfigs)
+        foreach (var deviceConfig in deviceConfigs)
         {
-            var deviceShort = ushort.Parse(deviceId, NumberStyles.HexNumber);
-            foreach (var (boardType, boardActions) in device)
+            if (deviceConfig.Devices is null) continue;
+
+            foreach (var (deviceId, device) in deviceConfig.Devices)
             {
-                foreach (var (ledNumber, ledActions) in boardActions)
+                var deviceShort = ushort.Parse(deviceId, NumberStyles.HexNumber);
+                foreach (var (boardType, boardActions) in device)
                 {
-                    foreach (var action in ledActions)
+                    foreach (var (ledNumber, ledActions) in boardActions)
                     {
-                        try
+                        foreach (var action in ledActions)
                         {
-                            SetUpTrigger(action.Trigger, action, ledNumber, boardType, deviceShort);
-                        }
-                        catch (ArgumentException)
-                        {
-                            _log.LogError("Unsupported comparator passed for {Id}. Skipping...", action.Trigger.Id);
+                            try
+                            {
+                                // if the file requires a trigger, then only run these actions when the trigger matches
+                                // this isn't the most efficient, but it works functionally for now
+                                var trigger = deviceConfig.Trigger is not null
+                                    ? new AndTrigger(new List<BaseTrigger> { deviceConfig.Trigger, action.Trigger })
+                                    : action.Trigger;
+                                SetUpTrigger(trigger, action, ledNumber, boardType, deviceShort);
+                            }
+                            catch (ArgumentException)
+                            {
+                                _log.LogError("Unsupported comparator passed for {Id}. Skipping...", action.Trigger.Id);
+                            }
                         }
                     }
                 }
@@ -55,10 +63,7 @@ public class Runner : IDisposable
 
     private void SetUpTrigger(BaseTrigger trigger, LedAction ledAction, int ledNumber, BoardType boardType, ushort deviceShort)
     {
-        var parentTrigger = ledAction.Trigger;
-        var triggerStrings = parentTrigger.TriggerStrings;
-
-        foreach (var key in triggerStrings)
+        foreach (var key in trigger.TriggerStrings)
         {
             if (!_actions.ContainsKey(key))
             {
