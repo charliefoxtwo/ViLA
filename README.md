@@ -45,11 +45,11 @@ ViLA has a long way to go.
 
 #### Does ViLA support additional conditional logic like AND, OR, etc?
 
-Not at this time. Maybe at some point in the future though!
+Yes! You can nest logical operators as deep as you like.
 
 #### Does ViLA support more complex actions, like flashing a light in response to an action?
 
-Not directly, no. You can get creative with the plugin and the Ids in your config.json file, but generally speaking this is not officially supported at this time. Again, maybe at some point in the future!
+Not directly, no. You can get creative with the plugin and the Ids in your config.json file, but generally speaking this is not officially supported at this time. Maybe at some point in the future!
 
 
 ## Local Development
