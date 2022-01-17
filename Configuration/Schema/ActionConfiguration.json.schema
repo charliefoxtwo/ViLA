@@ -90,7 +90,7 @@
                                     },
                                     "then": {
                                         "properties": { "comparator": { "enum": ["Not"] } },
-                                        "required": ["id", "value", "comparator"]
+                                        "required": ["value", "comparator"]
                                     }
                                 },
                                 {
