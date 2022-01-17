@@ -8,7 +8,7 @@ public class DoubleTrigger : BaseTrigger<double>
 
     public override bool ShouldTrigger(State state)
     {
-        if (!state.TryGetValue(Id, out double value))
+        if (!state.TryGetValue(Id!, out double value))
         {
             return false;
         }

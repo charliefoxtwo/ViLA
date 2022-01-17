@@ -8,7 +8,7 @@ public class BoolTrigger : BaseTrigger<bool>
 
     public override bool ShouldTrigger(State state)
     {
-        if (!state.TryGetValue(Id, out bool value))
+        if (!state.TryGetValue(Id!, out bool value))
         {
             return false;
         }

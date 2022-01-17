@@ -23,7 +23,7 @@ public class TriggerConverter : JsonConverter
         };
     }
 
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    public override object ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
         var jsonObject = JObject.Load(reader);
         var comparator = Enum.Parse<Comparator>(jsonObject
@@ -39,11 +39,11 @@ public class TriggerConverter : JsonConverter
             Comparator.None => new BasicTrigger(id),
             Comparator.GreaterThan or Comparator.LessThan or Comparator.GreaterThanOrEqualTo
                 or Comparator.LessThanOrEqualTo or Comparator.EqualTo or Comparator.NotEqualTo => TriggerForComparator(comparator, id, value),
-            Comparator.RegexMatch or Comparator.RegexNoMatch => new StringTrigger(id, value.Value<string>(), comparator),
-            Comparator.And => new AndTrigger(value.ToObject<List<BaseTrigger>>()),
-            Comparator.Or => new OrTrigger(value.ToObject<List<BaseTrigger>>()),
-            Comparator.Xor => new XorTrigger(value.ToObject<List<BaseTrigger>>()),
-            Comparator.Not => new NotTrigger(value.ToObject<BaseTrigger>()), // TODO: validate this works
+            Comparator.RegexMatch or Comparator.RegexNoMatch => new StringTrigger(id, value!.Value<string>()!, comparator),
+            Comparator.And => new AndTrigger(value!.ToObject<List<BaseTrigger>>()!),
+            Comparator.Or => new OrTrigger(value!.ToObject<List<BaseTrigger>>()!),
+            Comparator.Xor => new XorTrigger(value!.ToObject<List<BaseTrigger>>()!),
+            Comparator.Not => new NotTrigger(value!.ToObject<BaseTrigger>()!),
             _ => throw new Exception("Unknown comparator " + comparator),
         };
     }

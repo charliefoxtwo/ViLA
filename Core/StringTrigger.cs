@@ -16,7 +16,7 @@ public class StringTrigger : BaseTrigger<string>
 
     public override bool ShouldTrigger(State state)
     {
-        if (!state.TryGetValue(Id, out string value))
+        if (!state.TryGetValue(Id!, out string? value) || value is null)
         {
             return false;
         }

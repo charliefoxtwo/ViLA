@@ -11,10 +11,10 @@ public abstract class BaseTrigger<T> : BaseTrigger
     /// Attempts to construct a new Trigger based on the provided parameters. Throws if an unsupported comparator is passed.
     /// </summary>
     /// <param name="id">The trigger id</param>
-    /// <param name="value">The value to trigger on</param>
+    /// <param name="value">The non-null value to trigger on</param>
     /// <param name="comparator">The comparator to use when comparing a value to the trigger value</param>
     /// <exception cref="ArgumentException">Thrown when an unsupported comparator is passed</exception>
-    protected BaseTrigger(string id, T value, Comparator comparator) : base(id, value, comparator)
+    protected BaseTrigger(string id, T value, Comparator comparator) : base(id, value!, comparator)
     {
     }
 
