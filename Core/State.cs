@@ -9,7 +9,7 @@ public class State : Dictionary<string, dynamic>
         value = default;
         if (ContainsKey(key))
         {
-            value = this[key];
+            value = (T) this[key];
             return true;
         }
 

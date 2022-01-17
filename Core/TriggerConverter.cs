@@ -12,15 +12,14 @@ public class TriggerConverter : JsonConverter
 
     private static object TriggerForComparator(Comparator comparator, string id, JToken? value)
     {
-        var type = value.Type;
-        return type switch
+        return value?.Type switch
         {
-            JTokenType.Integer => new IntTrigger(id, value.Value<int>(), comparator),
+            JTokenType.Integer => new DoubleTrigger(id, value.Value<int>(), comparator),
             JTokenType.Float => new DoubleTrigger(id, value.Value<double>(), comparator),
-            JTokenType.String => new StringTrigger(id, value.Value<string>(), comparator),
+            JTokenType.String => new StringTrigger(id, value.Value<string>()!, comparator),
             JTokenType.Boolean => new BoolTrigger(id, value.Value<bool>(), comparator),
             _ => throw new ArgumentOutOfRangeException(nameof(value),
-                $"unsupported type {type} for comparator {comparator}")
+                $"unsupported type {value?.Type} for comparator {comparator}"),
         };
     }
 
