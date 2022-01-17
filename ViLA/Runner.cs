@@ -84,6 +84,7 @@ public class Runner : IDisposable
             plugin.SendTrigger += TriggerAction;
             plugin.LoggerFactory = loggerFactory;
             plugin.ClearState += ClearStateAction;
+            plugin.Triggers = _actions.Keys;
 
             _log.LogDebug("Starting plugin {Plugin}", plugin.GetType().Name);
 
