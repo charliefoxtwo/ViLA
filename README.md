@@ -19,6 +19,7 @@ Check out the [wiki](https://github.com/charliefoxtwo/ViLA/wiki) for a getting s
 ## Recommended plugins
 
 - [DCS Bios Reader](https://github.com/charliefoxtwo/ViLA-DCS-BIOS-Reader)
+- [SimConnect Reader](https://github.com/pieterwasalreadytaken/ViLA-SimConnect-Reader)
 
 
 ## Running
