@@ -4,7 +4,6 @@
 
 using Virpil.Communicator;
 
-namespace ViLA
-{
-    public record Target(BoardType BoardType, int LedNumber);
-}
+namespace ViLA;
+
+public record Target(BoardType BoardType, int LedNumber);

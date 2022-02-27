@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "#appConfig",
+    "title": "ViLA Configuration",
+    "description": "Configuration for ViLA actions",
+    "type": "object",
+
+    "properties": {
+        "logLevel": {
+            "description": "The level to log at",
+            "type": "string",
+            "enum": ["NONE", "TRACE", "DEBUG", "INFORMATION", "WARNING", "ERROR", "CRITICAL"]
+        },
+        "checkUpdates": {
+            "description": "Determines whether or not the application should check for plugin updates on start.",
+            "type": "boolean",
+            "default": true
+        },
+        "checkPrerelease": {
+            "description": "Determines whether or not the application should consider prerelease plugin releases when checking for updates.",
+            "type": "boolean",
+            "default": false
+        },
+        "disabledPlugins": {
+            "description": "Plugins which should not be loaded on the next run.",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "examples": [[ "DcsBiosReader.dll", "SamplePlugin.dll" ]]
+        }
+    }
+}

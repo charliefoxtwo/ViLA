@@ -9,7 +9,7 @@
             "title": "LED Action",
             "description": "An action to take for a USB LED",
             "type": "array",
-            
+
             "definitions": {
                 "action": {
                     "title": "Action",
@@ -29,16 +29,30 @@
                                 },
                                 "value": {
                                     "description": "The fixed value to compare the sent value to",
-                                    "type": ["number", "string", "boolean"]
+                                    "oneOf": [
+                                        {"type": "number"},
+                                        {"type": "string"},
+                                        {"type": "boolean"},
+                                        {"$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"},
+                                        {"type": "array", "items": {"$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"}}
+                                    ]
                                 },
                                 "comparator": {
                                     "description": "The method to compare the dcs-bios value with. The equation should read as 'biosValue comparator value'",
                                     "type": "string",
-                                    "enum": ["None", "GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo", "RegexMatch", "RegexNoMatch"]
+                                    "enum": ["None", "GreaterThan", "LessThan", "EqualTo", "NotEqualTo", "GreaterThanOrEqualTo", "LessThanOrEqualTo", "RegexMatch", "RegexNoMatch", "And", "Or", "Xor", "Not"]
                                 }
                             },
                             "additionalProperties": false,
                             "allOf": [
+                                {
+                                    "if": {
+                                        "required": ["id"]
+                                    },
+                                    "then": {
+                                        "required": ["value", "comparator"]
+                                    }
+                                },
                                 {
                                     "if": {
                                         "properties": { "value": { "type": "number" } },
@@ -71,14 +85,33 @@
                                 },
                                 {
                                     "if": {
+                                        "properties": { "value": { "$ref": "#/definitions/ledAction/definitions/action/definitions/trigger" } },
+                                        "required": ["value"]
+                                    },
+                                    "then": {
+                                        "properties": { "comparator": { "enum": ["Not"] } },
+                                        "required": ["value", "comparator"]
+                                    }
+                                },
+                                {
+                                    "if": {
+                                        "properties": { "value": { "type": "array", "items": {"$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"}}},
+                                        "required": ["value"]
+                                    },
+                                    "then": {
+                                        "properties": { "comparator": { "enum": ["And", "Or", "Xor"] } },
+                                        "required": ["value", "comparator"]
+                                    }
+                                },
+                                {
+                                    "if": {
                                         "required": ["comparator"]
                                     },
                                     "then": {
-                                        "required": ["id", "value", "comparator"]
+                                        "required": ["value", "comparator"]
                                     }
                                 }
-                            ],
-                            "required": ["id"]
+                            ]
                         }
                     },
 
@@ -105,28 +138,8 @@
     },
 
     "properties": {
-        "logLevel": {
-            "description": "The level to log at",
-            "type": "string",
-            "enum": ["NONE", "TRACE", "DEBUG", "INFORMATION", "WARNING", "ERROR", "CRITICAL"]
-        },
-        "checkUpdates": {
-            "description": "Determines whether or not the application should check for plugin updates on start.",
-            "type": "boolean",
-            "default": true
-        },
-        "checkPrerelease": {
-            "description": "Determines whether or not the application should consider prerelease plugin releases when checking for updates.",
-            "type": "boolean",
-            "default": false
-        },
-        "disabledPlugins": {
-            "description": "Plugins which should not be loaded on the next run.",
-            "type": "array",
-            "items": {
-                "type": "string"
-            },
-            "examples": [[ "DcsBiosReader.dll", "SamplePlugin.dll" ]]
+        "trigger": {
+            "$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"
         },
         "devices": {
             "description": "All devices and device actions go here. The key is the device's USB PID.",

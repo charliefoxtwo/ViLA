@@ -1,6 +1,6 @@
 {
-    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/Configuration/Schema/ActionConfiguration.json.schema",
-    "logLevel": "information",
+    "$schema": "https://raw.githubusercontent.com/charliefoxtwo/ViLA/main/Configuration/Schema/ViLAConfiguration.json.schema",
+    "logLevel": "INFORMATION",
     "checkUpdates": true,
     "checkPrerelease": false,
     "disabledPlugins": [ ]

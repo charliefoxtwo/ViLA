@@ -1,7 +1,7 @@
 
 # ViLA
 
-[![.NET 5 CI build](https://github.com/charliefoxtwo/ViLA/actions/workflows/ci-build.yml/badge.svg?branch=develop)](https://github.com/charliefoxtwo/ViLA/actions/workflows/ci-build.yml)
+[![.NET 6 CI build](https://github.com/charliefoxtwo/ViLA/actions/workflows/ci-build.yml/badge.svg?branch=develop)](https://github.com/charliefoxtwo/ViLA/actions/workflows/ci-build.yml)
 [![GitHub](https://img.shields.io/github/license/charliefoxtwo/ViLA?style=flat-square)](LICENSE)
 [![Discord](https://img.shields.io/discord/840762843917582347?style=flat-square)](https://discord.gg/rWAF3AdsKT)
 
@@ -19,6 +19,7 @@ Check out the [wiki](https://github.com/charliefoxtwo/ViLA/wiki) for a getting s
 ## Recommended plugins
 
 - [DCS Bios Reader](https://github.com/charliefoxtwo/ViLA-DCS-BIOS-Reader)
+- [SimConnect Reader](https://github.com/pieterwasalreadytaken/ViLA-SimConnect-Reader)
 
 
 ## Running
@@ -45,11 +46,11 @@ ViLA has a long way to go.
 
 #### Does ViLA support additional conditional logic like AND, OR, etc?
 
-Not at this time. Maybe at some point in the future though!
+Yes! You can nest logical operators as deep as you like.
 
 #### Does ViLA support more complex actions, like flashing a light in response to an action?
 
-Not directly, no. You can get creative with the plugin and the Ids in your config.json file, but generally speaking this is not officially supported at this time. Again, maybe at some point in the future!
+Not directly, no. You can get creative with the plugin and the Ids in your config.json file, but generally speaking this is not officially supported at this time. Maybe at some point in the future!
 
 
 ## Local Development
