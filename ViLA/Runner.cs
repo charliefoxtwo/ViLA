@@ -34,7 +34,9 @@ public class Runner : IDisposable
 
             foreach (var (deviceId, device) in deviceConfig.Devices)
             {
-                var deviceShort = ushort.Parse(deviceId, NumberStyles.HexNumber);
+                var parts = deviceId.Split('|');
+                var deviceShort = ushort.Parse(parts[0], NumberStyles.HexNumber);
+                var deviceName = parts.Length < 2 ? null : string.Concat(parts[1..]);
                 foreach (var (boardType, boardActions) in device)
                 {
                     foreach (var (ledNumber, ledActions) in boardActions)
@@ -48,7 +50,7 @@ public class Runner : IDisposable
                                 var trigger = deviceConfig.Trigger is not null
                                     ? new AndTrigger(new List<BaseTrigger> { deviceConfig.Trigger, action.Trigger })
                                     : action.Trigger;
-                                SetUpTrigger(trigger, action, ledNumber, boardType, deviceShort);
+                                SetUpTrigger(trigger, action, ledNumber, boardType, deviceShort, deviceName);
                             }
                             catch (ArgumentException)
                             {
@@ -61,7 +63,7 @@ public class Runner : IDisposable
         }
     }
 
-    private void SetUpTrigger(BaseTrigger trigger, LedAction ledAction, int ledNumber, BoardType boardType, ushort deviceShort)
+    private void SetUpTrigger(BaseTrigger trigger, LedAction ledAction, int ledNumber, BoardType boardType, ushort devicePid, string? deviceName)
     {
         foreach (var key in trigger.TriggerStrings)
         {
@@ -70,7 +72,7 @@ public class Runner : IDisposable
                 _actions[key] = new List<DeviceAction<BaseTrigger>>();
             }
 
-            _actions[key].Add(new DeviceAction<BaseTrigger>(ledAction.Color, trigger, new Target(boardType, ledNumber), deviceShort));
+            _actions[key].Add(new DeviceAction<BaseTrigger>(ledAction.Color, trigger, new Target(boardType, ledNumber), devicePid, deviceName));
         }
     }
 
@@ -115,14 +117,7 @@ public class Runner : IDisposable
         _log.LogTrace("got data {Data} for {Id}", (object) value, id);
         _state[id] = value;
 
-        foreach (var action in actions.Where(action => action.Trigger.ShouldTrigger(_state)))
-        {
-            if (!_monitor.TryGetDevice(action.Device, out var device)) continue;
-
-            _log.LogDebug("Triggering {Id}", id);
-            var (red, green, blue) = action.Color.ToLedPowers();
-            device.SendCommand(action.Target.BoardType, action.Target.LedNumber, red, green, blue);
-        }
+        SendCommands(actions.Where(action => action.Trigger.ShouldTrigger(_state)));
     }
 
     private void TriggerAction(string id)
@@ -130,11 +125,16 @@ public class Runner : IDisposable
         if (!_actions.TryGetValue(id, out var actions)) return; // nothing for this id, then leave
 
         _log.LogTrace("got trigger for {Id}", id);
+
+        SendCommands(actions);
+    }
+
+    private void SendCommands(IEnumerable<DeviceAction<BaseTrigger>> actions)
+    {
         foreach (var action in actions)
         {
-            if (!_monitor.TryGetDevice(action.Device, out var device)) continue;
+            if (!_monitor.TryGetDevice(action.DevicePid, action.DeviceName, out var device)) continue;
 
-            _log.LogDebug("Triggering {Id}", id);
             var (red, green, blue) = action.Color.ToLedPowers();
             device.SendCommand(action.Target.BoardType, action.Target.LedNumber, red, green, blue);
         }

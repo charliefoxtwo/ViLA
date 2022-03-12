@@ -21,6 +21,14 @@
             "type": "boolean",
             "default": false
         },
+        "additionalVids" : {
+            "description": "Extra VIDs to be checked (in hex format) in addition to the Virpil default 0x3344.",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "examples": [[ "12AB" ], [ "A1B9", "12AB" ]]
+        },
         "disabledPlugins": {
             "description": "Plugins which should not be loaded on the next run.",
             "type": "array",

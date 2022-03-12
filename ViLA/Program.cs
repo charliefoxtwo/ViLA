@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -44,7 +45,7 @@ public class Program
             plugins.Add(plugin);
         }
 
-        var monitor = VirpilMonitor.Initialize(loggerFactory);
+        var monitor = VirpilMonitor.Initialize(loggerFactory, cfg.AdditionalVids.Select(vid => ushort.Parse(vid, NumberStyles.HexNumber)));
         var devices = monitor.AllConnectedVirpilDevices;
 
         _log.LogInformation("Detected {DeviceNumber} devices", devices.Count);
