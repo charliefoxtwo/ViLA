@@ -64,10 +64,9 @@ public class Program
             }
         }
 
-        var deviceConfigs = DeviceConfiguration.GetDeviceConfigurations();
+        var deviceConfigs = DeviceConfiguration.GetDeviceConfigurations(loggerFactory.CreateLogger<DeviceConfiguration>());
 
-        using var r = new Runner(monitor, deviceConfigs.Values.Where(c => c != null).Select(c => c!), plugins,
-            loggerFactory.CreateLogger<Runner>());
+        using var r = new Runner(monitor, deviceConfigs, plugins, loggerFactory.CreateLogger<Runner>());
 
         await r.Start(loggerFactory);
 
