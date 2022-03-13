@@ -42,9 +42,16 @@ public class VilaConfiguration
 
     public static VilaConfiguration? GetVilaConfiguration()
     {
-        return Directory.EnumerateFiles("Configuration", "ViLA.json", SearchOption.AllDirectories).AsParallel()
-            .Select(f => JsonConvert.DeserializeObject<VilaConfiguration>(File.ReadAllText(f)))
-            .Where(c => c != null)
-            .Aggregate((s, t) => s!.Append(t!));
+        try
+        {
+            return Directory.EnumerateFiles("Configuration", "ViLA.json", SearchOption.AllDirectories).AsParallel()
+                .Select(f => JsonConvert.DeserializeObject<VilaConfiguration>(File.ReadAllText(f)))
+                .Where(c => c != null)
+                .Aggregate((s, t) => s!.Append(t!));
+        }
+        catch (Exception _)
+        {
+            return null;
+        }
     }
 }

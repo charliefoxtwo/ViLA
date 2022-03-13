@@ -22,4 +22,5 @@
   <Package Id="Newtonsoft.Json" Version="12.0.3" />
   <Package Id="RestSharp.Serializers.NewtonsoftJson" Version="106.11.7" />
   <Package Id="ViLA.PluginBase" Version="2.1.0" />
+  <Package Id="NReco.Logging.File" Version="1.1.4" />
 </StoreArtifacts>

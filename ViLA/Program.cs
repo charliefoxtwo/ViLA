@@ -22,19 +22,17 @@ public class Program
 
     public static async Task Main(string[] args)
     {
-
         var cfg = VilaConfiguration.GetVilaConfiguration();
+
+        var loggerFactory = LoggerFactory.Create(b => ConfigureLogger(b, cfg?.LogLevel ?? LogLevel.Information));
+
+        _log = loggerFactory.CreateLogger<Program>();
 
         if (cfg is null)
         {
-            var lf = LoggerFactory.Create(c => c.SetMinimumLevel(LogLevel.Information).AddConsole());
-
-            lf.CreateLogger<Program>().LogCritical("Config files are empty or error loading config files, exiting...");
+            _log.LogCritical("ViLA.json files are empty or error loading ViLA.json files, exiting...");
             return;
         }
-
-        var loggerFactory = LoggerFactory.Create(c => c.SetMinimumLevel(cfg.LogLevel ?? LogLevel.Information).AddConsole());
-        _log = loggerFactory.CreateLogger<Program>();
 
         await CheckProgramVersion(cfg.CheckPrerelease);
 
@@ -71,6 +69,17 @@ public class Program
         await r.Start(loggerFactory);
 
         await Task.Delay(-1, new CancellationToken());
+    }
+
+    private static void ConfigureLogger(ILoggingBuilder builder, LogLevel logLevel)
+    {
+        builder.SetMinimumLevel(logLevel).AddConsole().AddFile(string.Empty,
+            options =>
+            {
+                options.MinLevel = logLevel;
+                var fileName = $"log/ViLA_{DateTime.Now:yyyy-mm-ddTHHmmss}.log";
+                options.FormatLogFileName = _ => fileName;
+            });
     }
 
     private static async IAsyncEnumerable<PluginBase.PluginBase> LoadPlugins(IReadOnlySet<string> disabledPlugins, bool checkUpdates = true, bool checkPrerelease = false)
