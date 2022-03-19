@@ -77,7 +77,7 @@ public class Program
             options =>
             {
                 options.MinLevel = logLevel;
-                var fileName = $"log/ViLA_{DateTime.Now:yyyy-mm-ddTHHmmss}.log";
+                var fileName = $"log/ViLA_{DateTime.Now:yyyy-MM-ddTHHmmss}.log";
                 options.FormatLogFileName = _ => fileName;
             });
     }
