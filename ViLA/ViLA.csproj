@@ -18,7 +18,7 @@
       <PackageReference Include="RestSharp" Version="108.0.1" />
       <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="108.0.1" />
       <PackageReference Include="ViLA.PluginBase" Version="2.1.1" />
-      <PackageReference Include="Virpil.Communicator" Version="3.0.1" />
+      <PackageReference Include="Virpil.Communicator" Version="3.1.0" />
     </ItemGroup>
 
     <ItemGroup>
