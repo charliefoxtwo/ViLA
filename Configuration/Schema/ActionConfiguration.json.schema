@@ -142,7 +142,7 @@
             "$ref": "#/definitions/ledAction/definitions/action/definitions/trigger"
         },
         "devices": {
-            "description": "All devices and device actions go here. The key is the device's USB PID.",
+            "description": "All devices and device actions go here. The key is the device's USB PID in hex form, with the device name appended and separated by a vertical bar | if more than one identical PID exists.",
             "type": "object",
             "additionalProperties": {
                 "type": "object",

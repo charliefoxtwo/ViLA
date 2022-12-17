@@ -2,10 +2,12 @@
 // ReSharper disable ClassNeverInstantiated.Global
 #pragma warning disable 8618
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Core;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Virpil.Communicator;
 
@@ -16,12 +18,27 @@ public class DeviceConfiguration
     public BaseTrigger? Trigger { get; set; }
     public Dictionary<string, Device>? Devices { get; set; }
 
-    public static Dictionary<string, DeviceConfiguration?> GetDeviceConfigurations()
+    public static IEnumerable<DeviceConfiguration> GetDeviceConfigurations(ILogger<DeviceConfiguration> log)
     {
-        return Directory.EnumerateFiles("Configuration", "*.json", SearchOption.AllDirectories)
-            .Select(f => new KeyValuePair<string, DeviceConfiguration?>(f.Split('/').Last(), JsonConvert.DeserializeObject<DeviceConfiguration>(File.ReadAllText(f))))
-            .Where(kvp => kvp.Key != "ViLA.json")
-            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        foreach (var filePath in Directory.EnumerateFiles("Configuration", "*.json", SearchOption.AllDirectories))
+        {
+            var fileName = Path.GetFileName(filePath);
+            if (fileName == "ViLA.json") continue;
+
+            DeviceConfiguration? data;
+            try
+            {
+                data = JsonConvert.DeserializeObject<DeviceConfiguration>(File.ReadAllText(filePath));
+            }
+            catch (Exception ex)
+            {
+                log.LogWarning("Error while parsing config file [{File}], skipping...", fileName);
+                log.LogDebug("Error: {Error}", ex);
+                continue;
+            }
+
+            if (data is not null) yield return data;
+        }
     }
 }
 

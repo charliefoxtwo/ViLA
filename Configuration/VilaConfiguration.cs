@@ -16,6 +16,7 @@ public class VilaConfiguration
     public LogLevel? LogLevel { get; set; }
     public bool CheckUpdates { get; set; } = true;
     public bool CheckPrerelease { get; set; }
+    public HashSet<string> AdditionalVids { get; set; } = new();
     public HashSet<string> DisabledPlugins { get; set; } = new();
 
 
@@ -33,6 +34,7 @@ public class VilaConfiguration
 
         if (otherVilaConfiguration.CheckPrerelease) CheckPrerelease = otherVilaConfiguration.CheckPrerelease;
         if (otherVilaConfiguration.CheckUpdates) CheckUpdates = otherVilaConfiguration.CheckUpdates;
+        AdditionalVids.UnionWith(otherVilaConfiguration.AdditionalVids);
         DisabledPlugins.UnionWith(otherVilaConfiguration.DisabledPlugins);
 
         return this;
@@ -40,9 +42,16 @@ public class VilaConfiguration
 
     public static VilaConfiguration? GetVilaConfiguration()
     {
-        return Directory.EnumerateFiles("Configuration", "ViLA.json", SearchOption.AllDirectories).AsParallel()
-            .Select(f => JsonConvert.DeserializeObject<VilaConfiguration>(File.ReadAllText(f)))
-            .Where(c => c != null)
-            .Aggregate((s, t) => s!.Append(t!));
+        try
+        {
+            return Directory.EnumerateFiles("Configuration", "ViLA.json", SearchOption.AllDirectories).AsParallel()
+                .Select(f => JsonConvert.DeserializeObject<VilaConfiguration>(File.ReadAllText(f)))
+                .Where(c => c != null)
+                .Aggregate((s, t) => s!.Append(t!));
+        }
+        catch (Exception _)
+        {
+            return null;
+        }
     }
 }

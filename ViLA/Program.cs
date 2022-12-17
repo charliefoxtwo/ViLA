@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -21,19 +22,17 @@ public class Program
 
     public static async Task Main(string[] args)
     {
-
         var cfg = VilaConfiguration.GetVilaConfiguration();
+
+        var loggerFactory = LoggerFactory.Create(b => ConfigureLogger(b, cfg?.LogLevel ?? LogLevel.Information));
+
+        _log = loggerFactory.CreateLogger<Program>();
 
         if (cfg is null)
         {
-            var lf = LoggerFactory.Create(c => c.SetMinimumLevel(LogLevel.Information).AddConsole());
-
-            lf.CreateLogger<Program>().LogCritical("Config files are empty or error loading config files, exiting...");
+            _log.LogCritical("ViLA.json files are empty or error loading ViLA.json files, exiting...");
             return;
         }
-
-        var loggerFactory = LoggerFactory.Create(c => c.SetMinimumLevel(cfg.LogLevel ?? LogLevel.Information).AddConsole());
-        _log = loggerFactory.CreateLogger<Program>();
 
         await CheckProgramVersion(cfg.CheckPrerelease);
 
@@ -44,7 +43,7 @@ public class Program
             plugins.Add(plugin);
         }
 
-        var monitor = VirpilMonitor.Initialize(loggerFactory);
+        var monitor = VirpilMonitor.Initialize(loggerFactory, cfg.AdditionalVids.Select(vid => ushort.Parse(vid, NumberStyles.HexNumber)));
         var devices = monitor.AllConnectedVirpilDevices;
 
         _log.LogInformation("Detected {DeviceNumber} devices", devices.Count);
@@ -63,14 +62,24 @@ public class Program
             }
         }
 
-        var deviceConfigs = DeviceConfiguration.GetDeviceConfigurations();
+        var deviceConfigs = DeviceConfiguration.GetDeviceConfigurations(loggerFactory.CreateLogger<DeviceConfiguration>());
 
-        using var r = new Runner(monitor, deviceConfigs.Values.Where(c => c != null).Select(c => c!), plugins,
-            loggerFactory.CreateLogger<Runner>());
+        using var r = new Runner(monitor, deviceConfigs, plugins, loggerFactory.CreateLogger<Runner>());
 
         await r.Start(loggerFactory);
 
         await Task.Delay(-1, new CancellationToken());
+    }
+
+    private static void ConfigureLogger(ILoggingBuilder builder, LogLevel logLevel)
+    {
+        builder.SetMinimumLevel(logLevel).AddConsole().AddFile(string.Empty,
+            options =>
+            {
+                options.MinLevel = logLevel;
+                var fileName = $"log/ViLA_{DateTime.Now:yyyy-MM-ddTHHmmss}.log";
+                options.FormatLogFileName = _ => fileName;
+            });
     }
 
     private static async IAsyncEnumerable<PluginBase.PluginBase> LoadPlugins(IReadOnlySet<string> disabledPlugins, bool checkUpdates = true, bool checkPrerelease = false)
@@ -153,9 +162,10 @@ public class Program
         {
             response = await client.GetAsync<List<GithubReleaseResponse>>(request);
         }
-        catch (JsonSerializationException ex)
+        catch (Exception ex)
         {
             // probably a github rate limit. we'll just skip for now
+            // network can also be offline
             return;
         }
 
