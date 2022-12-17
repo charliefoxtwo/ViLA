@@ -7,7 +7,7 @@
   <Package Id="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
   <Package Id="Microsoft.Extensions.Options" Version="6.0.0" />
   <Package Id="Microsoft.Extensions.Primitives" Version="6.0.0" />
-  <Package Id="Virpil.Communicator" Version="3.0.1" />
+  <Package Id="Virpil.Communicator" Version="3.1.0" />
   <Package Id="McMaster.NETCore.Plugins" Version="1.4.0" />
   <Package Id="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
   <Package Id="Microsoft.Extensions.DependencyModel" Version="5.0.0" />

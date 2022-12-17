@@ -162,9 +162,10 @@ public class Program
         {
             response = await client.GetAsync<List<GithubReleaseResponse>>(request);
         }
-        catch (JsonSerializationException ex)
+        catch (Exception ex)
         {
             // probably a github rate limit. we'll just skip for now
+            // network can also be offline
             return;
         }
 
